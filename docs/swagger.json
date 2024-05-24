@@ -1,0 +1,147 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample server cell for sne Test API.",
+        "title": "sne API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/shorten": {
+            "post": {
+                "description": "Create shorted url",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "urlshortener"
+                ],
+                "summary": "Create shorted url",
+                "parameters": [
+                    {
+                        "description": "Create URL Shorted Request",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_arfan21_backend-test_internal_model.CreateURLShortedRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_arfan21_backend-test_internal_model.CreateURLShortedResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/github_com_arfan21_backend-test_pkg_pkgutil.HTTPResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/github_com_arfan21_backend-test_pkg_constant.ErrWithCode"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/{key}": {
+            "get": {
+                "description": "Redirect to original url",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "urlshorted"
+                ],
+                "summary": "Redirect to original url",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Shorted URL Key",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "github_com_arfan21_backend-test_internal_model.CreateURLShortedRequest": {
+            "type": "object",
+            "required": [
+                "long_url"
+            ],
+            "properties": {
+                "long_url": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_arfan21_backend-test_internal_model.CreateURLShortedResponse": {
+            "type": "object",
+            "properties": {
+                "short_url": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_arfan21_backend-test_pkg_constant.ErrWithCode": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_arfan21_backend-test_pkg_pkgutil.HTTPResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 200
+                },
+                "data": {},
+                "errors": {}
+            }
+        }
+    }
+}

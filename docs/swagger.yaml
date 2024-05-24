@@ -1,0 +1,94 @@
+basePath: /
+definitions:
+  github_com_arfan21_backend-test_internal_model.CreateURLShortedRequest:
+    properties:
+      long_url:
+        type: string
+    required:
+    - long_url
+    type: object
+  github_com_arfan21_backend-test_internal_model.CreateURLShortedResponse:
+    properties:
+      short_url:
+        type: string
+    type: object
+  github_com_arfan21_backend-test_pkg_constant.ErrWithCode:
+    properties:
+      message:
+        type: string
+    type: object
+  github_com_arfan21_backend-test_pkg_pkgutil.HTTPResponse:
+    properties:
+      code:
+        example: 200
+        type: integer
+      data: {}
+      errors: {}
+    type: object
+host: localhost:8080
+info:
+  contact:
+    name: API Support
+  description: This is a sample server cell for sne Test API.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: sne API
+  version: "1.0"
+paths:
+  /{key}:
+    get:
+      consumes:
+      - application/json
+      description: Redirect to original url
+      parameters:
+      - description: Shorted URL Key
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "302":
+          description: Found
+          schema:
+            type: string
+      summary: Redirect to original url
+      tags:
+      - urlshorted
+  /shorten:
+    post:
+      consumes:
+      - application/json
+      description: Create shorted url
+      parameters:
+      - description: Create URL Shorted Request
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_arfan21_backend-test_internal_model.CreateURLShortedRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_arfan21_backend-test_internal_model.CreateURLShortedResponse'
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/github_com_arfan21_backend-test_pkg_pkgutil.HTTPResponse'
+            - properties:
+                errors:
+                  items:
+                    $ref: '#/definitions/github_com_arfan21_backend-test_pkg_constant.ErrWithCode'
+                  type: array
+              type: object
+      summary: Create shorted url
+      tags:
+      - urlshortener
+swagger: "2.0"
